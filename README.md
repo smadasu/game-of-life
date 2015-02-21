@@ -1,6 +1,6 @@
 ## Introduction
 
-A play-clj game in which ... well, that part is up to you.
+Conway's Game of life using play-clj. Currently working with reasonable speed with 200x200 screen size and 10x10 cell size
 
 ## Contents
 
@@ -12,4 +12,4 @@ A play-clj game in which ... well, that part is up to you.
 
 ## Building
 
-All projects can be built using [Nightcode](https://nightcode.info/), or on the command line using [Leiningen](https://github.com/technomancy/leiningen) with the [lein-droid](https://github.com/clojure-android/lein-droid) and [lein-fruit](https://github.com/oakes/lein-fruit) plugins.
+Git clone and "lein run" in desktop folder.
