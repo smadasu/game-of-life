@@ -12,4 +12,4 @@ Conway's Game of life using play-clj. Currently working with reasonable speed wi
 
 ## Building
 
-Git clone and "lein run" in desktop folder.
+Git clone and "lein run" in desktop folder. Let it continue to run until it stops.
