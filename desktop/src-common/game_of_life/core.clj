@@ -47,22 +47,21 @@
                      #(and (:isCell? %) (:alive? %) (== (:x %) neighbor-x) (== (:y %) neighbor-y))
                      entities) true false))) (get neighbors (list x y)))))
 
-(defn apply-rules [entities {:keys [x y alive? isCell?] :as entity}]
+(defn- get-next-state [entities {:keys [alive?] :as entity}] 
+  (let [neighbor-states (find-neighbor-state entities entity)
+        alive-neighbors (get neighbor-states true 0)
+        dead-neighbors  (get neighbor-states false 0)]
+        (cond
+          (and alive?
+               (or (< alive-neighbors 2) (> alive-neighbors 3))) false
+          (and alive?
+               (or (== alive-neighbors 2) (== alive-neighbors 3))) true
+          (and (not alive?) (== alive-neighbors 3)) true
+          :else alive?)))
+
+(defn apply-rules [entities {:keys [alive? isCell?] :as entity}]
   (if isCell? 
-    (let [neighbor-states (find-neighbor-state entities entity)
-          live-count (get neighbor-states true)
-          alive-neighbors (if live-count live-count 0)
-          dead-count (get neighbor-states false)
-          dead-neighbors (if dead-count dead-count 0)
-          should-live
-          (cond
-            (and (= true alive?) 
-                 (or (< alive-neighbors 2) (> alive-neighbors 3))) false
-            (and (= true alive?)
-                 (or (== alive-neighbors 2) (== alive-neighbors 3))) true
-            (and (= false alive?) (== alive-neighbors 3)) true
-            :else alive?)]
-      (change-entity-state entity should-live))
+      (change-entity-state entity (get-next-state entities entity))
     entity))
 
 (defscreen main-screen
