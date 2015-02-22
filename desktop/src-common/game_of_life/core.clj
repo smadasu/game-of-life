@@ -59,11 +59,20 @@
           (and (not alive?) (== alive-neighbors 3)) true
           :else alive?)))
 
-(defn apply-rules [entities {:keys [alive? isCell?] :as entity}]
-  (if isCell? 
-      (change-entity-state entity (get-next-state entities entity))
-    entity))
-
+(defn change-grid
+  [entities]
+  (loop [the-co-ordinates co-ordinates the-entities entities]
+    (if (empty? the-co-ordinates)
+      the-entities
+     (let [current-x-y (first the-co-ordinates) 
+           current-x (first current-x-y)
+           current-y (second current-x-y)
+           current-entity (first (filter #(and (= (:x %) current-x) (= (:y %) current-y)) the-entities))
+           the-index (.indexOf the-entities current-entity)
+           should-live (get-next-state the-entities current-entity)]
+       (recur (next the-co-ordinates) 
+              (assoc the-entities the-index (change-entity-state current-entity should-live)))))))
+       
 (defscreen main-screen
   :on-show
   (fn [screen entities]
@@ -81,9 +90,7 @@
   :on-timer
   (fn [screen entities]
     (case (:id screen)
-      ;:spawn-forms (reduce apply-rules entities entities)))
-      :spawn-forms (map 
-                     #(apply-rules entities %) entities)))
+      :spawn-forms (change-grid entities)))
 
   :on-key-down
   (fn [screen entities]
