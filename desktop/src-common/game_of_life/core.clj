@@ -2,6 +2,7 @@
   (:require [play-clj.core :refer :all]
             [play-clj.g2d :refer :all]
             [clojure.math.combinatorics :as combo]))
+
 (declare game-of-life main-screen)
 
 (def pixel-size 10)
@@ -9,12 +10,13 @@
 (def co-ordinates (combo/cartesian-product (range 0 201 pixel-size) (range 0 201 pixel-size)))
 
 (def initial-state 
-  (map (fn [[x y]]
+  (->> co-ordinates 
+       (map (fn [[x y]]
          (let [alive? (even? (rand-int 100))
                x-of-region (if alive? 0 pixel-size)]
            (assoc (texture "combined.jpeg" :set-region x-of-region 0 pixel-size pixel-size)
                   :x x :y y :width pixel-size :height pixel-size 
-                  :isCell? true :alive? alive?))) co-ordinates))
+                  :isCell? true :alive? alive?))))))
 
 (def neighbors
   (into {} (map (fn [[x y]]
