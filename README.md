@@ -1,6 +1,6 @@
 ## Introduction
 
-Conway's Game of life(http://en.wikipedia.org/wiki/Conway's_Game_of_Life) using https://github.com/oakes/play-clj. Currently working with reasonable speed with 200x200 screen size and 10x10 cell size
+[Conway's Game of life](http://en.wikipedia.org/wiki/Conway's_Game_of_Life) using [play-clj](https://github.com/oakes/play-clj). Currently working with reasonable speed with 200x200 screen size and 10x10 cell size
 
 ## Contents
 
