@@ -15,8 +15,7 @@
               (let [alive? (even? (rand-int 100))
                     x-of-region (if alive? 0 pixel-size)]
                 (assoc (texture "combined.jpeg" :set-region x-of-region 0 pixel-size pixel-size)
-                       :x x :y y :width pixel-size :height pixel-size 
-                       :isCell? true :alive? alive?))))))
+                       :x x :y y :width pixel-size :height pixel-size :alive? alive?))))))
 
 (def neighbors
   (into {} (map (fn [[x y]]
@@ -39,7 +38,7 @@
                  (> neighbor-x 200) (> neighbor-y 200)) false
              :else 
              (if (some 
-                   #(and (:isCell? %) (:alive? %) (== (:x %) neighbor-x) (== (:y %) neighbor-y))
+                   #(and (:alive? %) (== (:x %) neighbor-x) (== (:y %) neighbor-y))
                    entities) true false))) (get neighbors (list x y)))))
 
 (defn- get-next-state [entities {:keys [alive?] :as entity}] 
@@ -73,9 +72,7 @@
   (fn [screen entities]
     (update! screen :renderer (stage))
     (add-timer! screen :spawn-forms 0.3 0.3)
-    (let [background (assoc (texture "background.jpeg") :width 200 :height 200)]
-      (vec (conj initial-state background)))
-    )
+      (vec initial-state))
 
   :on-render
   (fn [screen entities]
@@ -99,5 +96,3 @@
   :on-create
   (fn [this]
     (set-screen! this main-screen)))
-
-;(app! :post-runnable #(set-screen! game-of-life main-screen))
