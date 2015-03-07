@@ -27,7 +27,8 @@
                              (list (- y pixel-size) y (+ y pixel-size))))}) co-ordinates)))
 
 (defn is-alive? [entity]
-  (= 0 (texture! entity :get-region-x)))
+  (if (nil? entity) false
+    (= 0 (texture! entity :get-region-x))))
 
 (defn- change-entity-state [entity live-state]
   (texture! entity
@@ -36,12 +37,9 @@
 (defn find-neighbor-state [entities {:keys [x y] :as entity}]
   (frequencies 
     (map (fn [[neighbor-x neighbor-y]]
-           (if
-             (or (< neighbor-x 0) (< neighbor-y 0)
-                 (> neighbor-x 200) (> neighbor-y 200)) false
-             (is-alive? 
-               (first 
-                 (filter #(and (== (:x %) neighbor-x) (== (:y %) neighbor-y)) entities)))))
+           (is-alive?
+             (first
+               (filter #(and (== (:x %) neighbor-x) (== (:y %) neighbor-y)) entities))))
          (get neighbors (list x y)))))
 
 (defn- get-next-state [entities entity] 
@@ -74,18 +72,13 @@
   :on-show
   (fn [screen entities]
     (update! screen :renderer (stage))
-    (add-timer! screen :spawn-forms 0.2 0.2)
     (vec initial-state))
 
   :on-render
   (fn [screen entities]
-    (clear!)
-    (render! screen entities))
-
-  :on-timer
-  (fn [screen entities]
-    (case (:id screen)
-      :spawn-forms (change-grid entities)))
+    ;(clear!)
+    ;(change-grid entities)
+    (render! screen (change-grid entities)))
 
   :on-key-down
   (fn [screen entities]
