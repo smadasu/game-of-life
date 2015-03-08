@@ -14,9 +14,7 @@
                   (if (even? (rand-int 100)) 0 pixel-size) 0 pixel-size pixel-size)
          :x x :y y :width pixel-size :height pixel-size))
 
-(def initial-state 
-  (->> co-ordinates 
-       (map convert-x-y-to-cell)))
+(def initial-state (map convert-x-y-to-cell co-ordinates))
 
 (def neighbors
   (into {} (map (fn [[x y]]
