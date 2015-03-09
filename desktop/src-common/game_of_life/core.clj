@@ -9,12 +9,11 @@
 
 (def co-ordinates (combo/cartesian-product (range 0 201 pixel-size) (range 0 201 pixel-size)))
 
-(defn convert-x-y-to-cell [[x y]]
-  (assoc (texture "combined.jpeg" :set-region 
-                  (if (even? (rand-int 100)) 0 pixel-size) 0 pixel-size pixel-size)
-         :x x :y y :width pixel-size :height pixel-size))
-
-(def initial-state (map convert-x-y-to-cell co-ordinates))
+(def initial-state (map (fn [[x y]]
+                          (assoc (texture "combined.jpeg" :set-region 
+                                          (if (even? (rand-int 100)) 0 pixel-size) 0 pixel-size pixel-size)
+                                 :x x :y y :width pixel-size :height pixel-size)
+                          ) co-ordinates))
 
 (def neighbors
   (into {} (map (fn [[x y]]
