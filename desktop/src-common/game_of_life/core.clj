@@ -1,13 +1,14 @@
 (ns game-of-life.core
   (:require [play-clj.core :refer :all]
-            [play-clj.g2d :refer :all]
-            [clojure.math.combinatorics :as combo]))
+            [play-clj.g2d :refer :all]))
 
 (declare game-of-life main-screen)
 
 (def pixel-size 10)
 
-(def co-ordinates (combo/cartesian-product (range 0 201 pixel-size) (range 0 201 pixel-size)))
+(def co-ordinates (for [row (range 0 201 pixel-size) 
+                        column (range 0 201 pixel-size)]
+                    (list row column)))
 
 (def initial-state (map (fn [[x y]]
                           (assoc (texture "combined.jpeg" :set-region 
@@ -19,9 +20,9 @@
   (into {} (map (fn [[x y]]
                   {(list x y)
                    (filter #(not= % (list x y))
-                           (combo/cartesian-product
-                             (list (- x pixel-size) x (+ x pixel-size))
-                             (list (- y pixel-size) y (+ y pixel-size))))}) co-ordinates)))
+                           (for [row (list (- x pixel-size) x (+ x pixel-size))
+                                 column (list (- y pixel-size) y (+ y pixel-size))]
+                             (list row column)))}) co-ordinates)))
 
 (defn is-alive? [entity]
   (if (nil? entity) false
